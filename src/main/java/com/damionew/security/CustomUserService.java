@@ -29,6 +29,7 @@ public class CustomUserService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		 User user = userMapper.findUserByUserName(username);  
 	        if (user == null) {  
+	        	
 	            throw new UsernameNotFoundException("用户名："+username+"不存在");  
 	        }  
 	        Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();  
