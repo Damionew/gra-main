@@ -40,6 +40,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	 */
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
+		//解决SpringBoot不允许加载Iframe
+		//"Refused to display 'http://......' in a frame because it set 'X-Frame-Options' to 'DENY'.
+		httpSecurity.headers().frameOptions().disable();	
 		httpSecurity
 			.authorizeRequests()
 				.antMatchers("/assets/**","/css/**","/js/**").permitAll()	//定义不需要被保护的URL
