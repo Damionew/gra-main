@@ -15,4 +15,9 @@ public class PageController {
 	public String invoice() {
 		return "invoice";
 	}
+	
+	@RequestMapping("/photoalbum")
+	public String photoalbum() {
+		return "photoalbum";
+	}
 }
