@@ -20,4 +20,9 @@ public class PageController {
 	public String photoalbum() {
 		return "photoalbum";
 	}
+	
+	@RequestMapping("/familyPhoto")
+	public String familyPhoto() {
+		return "familyPhoto";
+	}
 }
