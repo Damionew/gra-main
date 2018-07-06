@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN" >
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+		<title>Bootstrap 101 Template</title>
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="container">
+			<!-- 聊天窗口 -->
+			<div class="row">
+				<div class="col-md-12">
+					<span id="curentUserName" th:text="${username}" style="display:none"></span>
+					<span>聊天室</span>
+					<div class="message" style="width:80%;height:50%">
+						<textarea id="messages" readonly="readonly" style="width: 1137px;height: 309px;">
+						</textarea>
+					</div>
+				</div>
+			</div>
+			<!-- 输入框 -->
+			<div class="row">
+				<div class="col-md-12">
+						<button id="btn_join" class="btn btn-default">加入</button>
+						<button id="btn_exit" class="btn btn-default">退出</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+						<div class="form-group">
+							<label for="content">Name</label>
+							<input type="text" class="form-control" id="content" placeholder="请输入聊天内容。。。">
+						</div>
+						<button id="send" class="btn btn-default">发送</button>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery-2.1.1.min.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#messages").append("欢迎使用XXXX在线聊天室！"+"\n");
+			// var urlPrefix = "ws://http:47.96.111.237:8080/gra-main/chatroom/"; 
+			var urlPrefix = "ws://localhost:8004/chatroom/";
+			var ws;
+			$("#btn_join").click(function(){
+				var username = $("#curentUserName")[0].innerHTML;
+				var url = urlPrefix+username;
+				ws = new WebSocket(url);
+				ws.onopen = function(){
+					console.log("建立Websocket连接");
+				};
+				ws.onmessage = function(event){
+					//服务端发送的消息
+					$("#messages").append(event.data+"\n");
+				};
+				ws.onclose = function(){
+					$("#messages").append("用户["+username+"]已离开聊天室"+"\n");
+					console.log("关闭Websocket连接");
+				}
+			});
+			$("#send").click(function(){
+				var message = $("#content").val();
+				if(ws){
+					ws.send(message);
+				}
+			})
+			$("#btn_exit").click(function(){
+				if(ws){
+					console.log("关闭Websocket连接");
+					ws.close();
+				}
+			})
+		})
+	</script>
+</html>

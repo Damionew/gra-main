@@ -11,11 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
 import com.damionew.model.Menu;
 import com.damionew.service.MenuService;
+import com.damionew.utils.UserInfoUtil;
 
 @Controller
 public class IndexController {
@@ -23,10 +22,13 @@ public class IndexController {
 	@Autowired
 	MenuService menuService;
 	
-	@RequestMapping("/index")
+	@RequestMapping(value= {"/index","/"})
 	public String indexPage(Model model) {
+		// 菜单（二级）
 		List<Menu> menuList = menuService.menuList();
 		model.addAttribute("menuList", menuList);
+		String curentUserName = UserInfoUtil.getCurUsername();
+		model.addAttribute("curentUserName", curentUserName);
 //		JSONObject jsonObject = new JSONObject();
 //		jsonObject.put("menuList",menuList);
 		return "index";

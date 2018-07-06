@@ -4,14 +4,15 @@
 <head>
     <meta charset="utf-8">
     <title>Gra—Main</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
     <!-- Le styles -->
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/loader-style.css">
-    <link rel="stylesheet" href="assets/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="assets/js/progress-bar/number-pb.css">
+    <link rel="stylesheet" href="assets/css/style.css"/>
+    <link rel="stylesheet" href="assets/css/loader-style.css"/>
+    <link rel="stylesheet" href="assets/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="assets/js/progress-bar/number-pb.css"/>
     <style type="text/css">
     #toggle{
     	top:10px !important;
@@ -23,13 +24,14 @@
     	top:-10px;
     }
     </style>
-    <meta http-equiv="X-Frame-Options" content="deny">
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
     <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="assets/ico/minus.png">
+    <link rel="shortcut icon" href="assets/ico/minus.png"/>
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&amp;ak=3ZxdK3XO9S51XPPOgTujzau5LhoTECll"></script>
 </head>
 <body> 
     <!-- Preloader -->
@@ -171,12 +173,12 @@
                 <ul style="margin-right:0;" class="nav navbar-nav navbar-right">
                     <li>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <img alt="" class="admin-pic img-circle" src="http://api.randomuser.me/portraits/thumb/men/10.jpg">Hi, Dave Mattew <b class="caret"></b>
+                            <img alt="" class="admin-pic img-circle" src="http://api.randomuser.me/portraits/thumb/men/10.jpg">Hi,<span th:text="${curentUserName}"></span> <b class="caret"></b>
                         </a>
                         <ul style="margin-top:14px;" role="menu" class="dropdown-setting dropdown-menu">
                             <li>
-                                <a href="#">
-                                    <span class="entypo-user"></span>&#160;&#160;My Profile</a>
+                                <a href="/logout">
+                                    <span class="entypo-user"></span>&#160;&#160;退出登录</a>
                             </li>
                             <li>
                                 <a href="#">
@@ -212,11 +214,6 @@
                                 <div id="button-bg13"></div>
                             </li>
                         </ul>
-                    </li>
-                    <li class="hidden-xs">
-                        <a class="toggle-left" href="#">
-                            <span style="font-size:20px;" class="entypo-list-add"></span>
-                        </a>
                     </li>
                 </ul>
             </div>
@@ -271,14 +268,14 @@
     <!-- END OF SIDE MENU -->
     <!--  PAPER WRAP -->
     <div class="wrap-fluid" >
-    	<iframe id="placeholder" name="iframe" src="/img/DSC00320.JPG" frameborder="0" align="left" style="width:100%;height:800px;margin-top: 10px;" scrolling="no">
+    	<iframe id="placeholder" name="iframe" src="" frameborder="0" align="left" style="width:100%;height:800px;margin-top: 10px;" scrolling="no">
         </iframe>
     </div>
     <!--  END OF PAPER WRAP -->
     <!-- RIGHT SLIDER CONTENT -->
     <!-- END OF RIGHT SLIDER CONTENT-->
-    <script type="text/javascript" src="assets/js/jquery.js"></script>
-    <script src="assets/js/progress-bar/src/jquery.velocity.min.js"></script>
+    
+    <script type="text/javascript" src="assets/js/progress-bar/src/jquery.velocity.min.js"></script>
     <script src="assets/js/progress-bar/number-pb.js"></script>
     <script src="assets/js/progress-bar/progress-app.js"></script>
     <!-- MAIN EFFECT -->
@@ -287,7 +284,6 @@
     <script type="text/javascript" src="assets/js/app.js"></script>
     <script type="text/javascript" src="assets/js/load.js"></script>
     <script type="text/javascript" src="assets/js/main.js"></script>
-    <!-- GAGE -->
     <script type="text/javascript" src="assets/js/chart/jquery.flot.js"></script>
     <script type="text/javascript" src="assets/js/chart/jquery.flot.resize.js"></script>
     <script type="text/javascript" src="assets/js/chart/realTime.js"></script>
@@ -295,8 +291,40 @@
     <script type="text/javascript" src="assets/js/countdown/jquery.countdown.js"></script>
     <script src="assets/js/jhere-custom.js"></script>
     <script type="text/javascript">
-    </script>
-    <script>
+	    $(document).ready(function getPosition(){
+	    	var geolocation = new BMap.Geolocation();
+	    	// 开启百度地图SDK辅助定位
+	    	geolocation.enableSDKLocation();
+	    	geolocation.getCurrentPosition(function(r){
+	    		if(this.getStatus() == BMAP_STATUS_SUCCESS){
+	    			var mk = new BMap.Marker(r.point);
+	    			// 创建地理编码实例      
+	    			var myGeo = new BMap.Geocoder();      
+	    			// 根据坐标得到地址描述    
+	    			myGeo.getLocation(new BMap.Point(r.point.lng, r.point.lat), function(result){      
+	    			    if (result){      
+	    			  	 	alert(result.addressComponents.city);      
+	    			    }      
+	    			});
+	    			$.ajax({
+	    				url : "weather/uploadLocation",
+	    				data : {
+	    					lng : r.point.lng,
+	    					lat : r.point.lat
+	    				},
+	    				success : function(){
+	    					
+	    				},error : function(){
+	    					alert("地址上传失败");
+	    				}
+	    			})
+	    		}
+	    		else {
+	    			alert('failed'+this.getStatus());
+	    		}        
+	    	});
+	    })
+    	
     </script>
 </body>
 

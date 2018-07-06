@@ -6,10 +6,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import com.damionew.security.CustomUserService;
 import com.damionew.security.MyPasswordEncoder;
@@ -43,9 +40,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		//解决SpringBoot不允许加载Iframe
 		//"Refused to display 'http://......' in a frame because it set 'X-Frame-Options' to 'DENY'.
 		httpSecurity.headers().frameOptions().disable();	
+		httpSecurity.httpBasic();
 		httpSecurity
+			.csrf().disable()
+			
 			.authorizeRequests()
-				.antMatchers("/assets/**","/css/**","/photoalbum/**","/fluidgallery/**","/js/**").permitAll()	//定义不需要被保护的URL
+				.antMatchers("/assets/**","/css/**","/photoalbum/**","/bootstrap/**","/fluidgallery/**","/js/**").permitAll()	//定义不需要被保护的URL
 				.anyRequest().authenticated()	//定义需要被保护的URL，即需要通过身份验证
 				.and()
 			.formLogin()	//定义当用户需要登录时，跳转的登录页面
@@ -54,6 +54,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 				.defaultSuccessUrl("/index")
 				.and()
 			.logout()
+				.logoutUrl("/logout")
+				.logoutSuccessUrl("/login")
+				.invalidateHttpSession(true)
 				.permitAll();
 		
 	}
