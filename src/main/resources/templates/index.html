@@ -150,23 +150,8 @@
                         <li class="meridiem"></li>
                     </ul>
                     <ul id="nt-title">
-                        <li><i class="wi-day-lightning"></i>&#160;&#160;Berlin&#160;
-                            <b>85</b><i class="wi-fahrenheit"></i>&#160;; 15km/h
-                        </li>
-                        <li><i class="wi-day-lightning"></i>&#160;&#160;Yogyakarta&#160;
-                            <b>85</b><i class="wi-fahrenheit"></i>&#160;; Tonight- 72 °F (22.2 °C)
-                        </li>
-
-                        <li><i class="wi-day-lightning"></i>&#160;&#160;Sttugart&#160;
-                            <b>85</b><i class="wi-fahrenheit"></i>&#160;; 15km/h
-                        </li>
-
-                        <li><i class="wi-day-lightning"></i>&#160;&#160;Muchen&#160;
-                            <b>85</b><i class="wi-fahrenheit"></i>&#160;; 15km/h
-                        </li>
-
-                        <li><i class="wi-day-lightning"></i>&#160;&#160;Frankurt&#160;
-                            <b>85</b><i class="wi-fahrenheit"></i>&#160;; 15km/h
+                        <li><i class="wi-day-lightning"></i>&#160;&#160;<span id="city"></span>&#160;
+                            <b id="cond_txt"></b>&#160;; <b id="tmp"></b><i class="wi-celcius"></i>
                         </li>
                     </ul>
                 </div>
@@ -289,9 +274,12 @@
     <script type="text/javascript" src="assets/js/chart/realTime.js"></script>
     <script type="text/javascript" src="assets/js/speed/canvasgauge-coustom.js"></script>
     <script type="text/javascript" src="assets/js/countdown/jquery.countdown.js"></script>
+    <script type="text/javascript" src="assets/js/gage/raphael.2.1.0.min.js"></script>
+    <script type="text/javascript" src="assets/js/gage/justgage.js"></script>
     <script src="assets/js/jhere-custom.js"></script>
     <script type="text/javascript">
 	    $(document).ready(function getPosition(){
+	    	var countVistors = 0;
 	    	var geolocation = new BMap.Geolocation();
 	    	// 开启百度地图SDK辅助定位
 	    	geolocation.enableSDKLocation();
@@ -302,8 +290,9 @@
 	    			var myGeo = new BMap.Geocoder();      
 	    			// 根据坐标得到地址描述    
 	    			myGeo.getLocation(new BMap.Point(r.point.lng, r.point.lat), function(result){      
-	    			    if (result){      
-	    			  	 	alert(result.addressComponents.city);      
+	    			    if (result){   
+	    			    	var city = result.addressComponents.city;
+	    			    	alert(city);
 	    			    }      
 	    			});
 	    			$.ajax({
@@ -312,17 +301,52 @@
 	    					lng : r.point.lng,
 	    					lat : r.point.lat
 	    				},
-	    				success : function(){
-	    					
+	    				method : "post",
+	    				dataType : "json",
+	    				success : function(res){
+	    					debugger;
+	    					document.getElementById("city").innerText = res.city;
+	    					document.getElementById("cond_txt").innerText = res.cond_txt;
+	    					document.getElementById("tmp").innerText = res.tmp;
 	    				},error : function(){
 	    					alert("地址上传失败");
 	    				}
-	    			})
+	    			});
+	    			
+	    			$.ajax({
+	    				url : "countVistors",
+	    				data : {
+	    				},
+	    				method : "post",
+	    				dataType : "json",
+	    				async : false,
+	    				success : function(res){
+	        				countVistors = res.countVistors;
+	        				 var g1 = new JustGage({
+	        		             id: "g1",
+	        		             value: countVistors,
+	        		             min: 0,
+	        		             max: 1000,
+	        		             relativeGaugeSize: true,
+	        		             gaugeColor: "rgba(0,0,0,0.4)",
+	        		             levelColors: "#0DB8DF",
+	        		             labelFontColor : "#ffffff",
+	        		             titleFontColor: "#ffffff",
+	        		             valueFontColor :"#ffffff",
+	        		             label: "VISITORS",
+	        		             gaugeWidthScale: 0.2,
+	        		             donut: true
+	        		         });
+	        			},error : function(){
+	        				alert("wrong");
+	        			}
+	        		})
 	    		}
 	    		else {
 	    			alert('failed'+this.getStatus());
 	    		}        
 	    	});
+	    	
 	    })
     	
     </script>

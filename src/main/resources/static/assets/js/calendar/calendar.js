@@ -14,6 +14,7 @@ Date.prototype.getWeek = function() {
 }
 Date.prototype.getMonthFormatted = function() {
 	var month = this.getMonth() + 1;
+	debugger;
 	return month < 10 ? '0' + month : month;
 }
 Date.prototype.getDateFormatted = function() {

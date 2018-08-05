@@ -5,17 +5,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.damionew.service.LoginHistoryService;
 
 /**
  * 通过前台获取经纬度转换为地址信息
@@ -25,7 +27,8 @@ import com.alibaba.fastjson.JSONObject;
  */
 @Controller
 public class WeatherController {
-	
+	@Autowired
+	LoginHistoryService loginHistoryService;
 	@ResponseBody
 	@RequestMapping("weather/uploadLocation")
 	public String locationTransform(HttpServletRequest request) throws IOException {
@@ -33,7 +36,12 @@ public class WeatherController {
 		String lng = request.getParameter("lng");
 		// 纬度
 		String lat = request.getParameter("lat");
-		//调用百度地图转换接口-逆地址编码
+		// 登录成功，将用户登录信息插入历史表中
+		Map<String, String> loginHistory = new HashMap<String, String>();
+		loginHistory.put("lng", lng);
+		loginHistory.put("lat", lat);
+		loginHistoryService.insertLoginHistory(loginHistory);
+		// 调用百度地图转换接口-逆地址编码
 		String url = "http://api.map.baidu.com/geocoder/v2/?location="+
 		lat+","+lng+"&output=json&pois=1&ak=3ZxdK3XO9S51XPPOgTujzau5LhoTECll";
 		URL u = new URL(url);
@@ -48,7 +56,7 @@ public class WeatherController {
 			String str;
 			while((str = reader.readLine())!=null) {
 				stringBuilder.append(str);
-				System.out.println(str);
+//				System.out.println(str);
 			}
 		}
 		/*
@@ -60,16 +68,45 @@ public class WeatherController {
 		 * http://lbsyun.baidu.com/index.php?title=webapi/guide/webservice-geocoding-abroad
 		 */
 		String addString =  stringBuilder.toString();
-//		JSONObject  jsonObject = JSONObject.parseObject(addString);
-//		String[] address =addString.split("\\(");
-//		String[] addressjson = address[1].split("\\)");
 		JSONObject parseObject = JSONObject.parseObject(addString);
 		JSONObject jsonResult = parseObject.getJSONObject("result");
+		// 获取城市信息
 		JSONObject addressComponentResult = jsonResult.getJSONObject("addressComponent");
 		String city = addressComponentResult.getString("city");
-//		JSON parseObject =  JSON.parse(addressJson);
-//		String addressComponent = parseObject.getString("addressComponent");
-		System.out.println(city);
-		return "";
+		// 根据城市调用天气接口获取天气数据
+		String weatherUrl = "https://free-api.heweather.com/s6/weather/now?location="+city+
+		"&key=61b63321f9fa455fa04cc92881cc0a52";
+		StringBuilder weatherBuilder = new StringBuilder();
+		URL weatherU = new URL(weatherUrl);
+		HttpURLConnection weatherCon = (HttpURLConnection) weatherU.openConnection();
+		weatherCon.setRequestMethod("GET");
+		weatherCon.setReadTimeout(5000);
+		weatherCon.setConnectTimeout(5000);
+		if (weatherCon.getResponseCode() == 200) {
+			InputStream weatherIn = weatherCon.getInputStream();
+			BufferedReader weatherReader = new BufferedReader(new InputStreamReader(weatherIn));
+			String weatherStr = "";
+			while ((weatherStr = weatherReader.readLine()) != null) {
+				weatherBuilder.append(weatherStr);
+//				System.out.println(weatherStr);
+			}
+		}
+		String weather = weatherBuilder.toString();
+		weather = weather.substring(15,weather.length()-2);
+		JSONObject weatherObject = JSONObject.parseObject(weather);
+		// 实时天气
+		JSONObject now = weatherObject.getJSONObject("now");
+		// 温度
+		String tmp = now.getString("tmp");
+		// 风力
+		String wind_spd = now.getString("wind_spd");
+		// 云气
+		String cond_txt = now.getString("cond_txt");
+		JSONObject weatherResult = new JSONObject();
+		weatherResult.put("tmp",tmp);
+		weatherResult.put("wind_spd",wind_spd);
+		weatherResult.put("cond_txt",cond_txt);
+		weatherResult.put("city", city);
+		return weatherResult.toJSONString();
 	}
 }

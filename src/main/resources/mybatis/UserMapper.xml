@@ -22,4 +22,5 @@
 	    WHERE gm_user.`username`= #{username}
 	</select>
 	
+	
 </mapper>

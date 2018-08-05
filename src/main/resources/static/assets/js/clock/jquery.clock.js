@@ -70,7 +70,6 @@ jQuery.calcTime = function(offset) {
 
   // create Date object for current location
   d = new Date();
-
   // convert to msec
   // add local time zone offset
   // get UTC time in msec
@@ -81,5 +80,6 @@ jQuery.calcTime = function(offset) {
   nd = new Date(utc + (3600000*offset));
 
   // return time as a string
-  return nd;
+//  return nd;
+  return d;
 };

@@ -1,3 +1,5 @@
+var g1;
+   
 //Sliding Effect Control
 head.js("assets/js/skin-select/jquery.cookie.js");
 head.js("assets/js/skin-select/skin-select.js");
@@ -289,29 +291,12 @@ head.js("assets/js/clock/jquery.clock.js", function() {
 
 //------------------------------------------------------------- 
 
-head.js("assets/js/gage/raphael.2.1.0.min.js", "assets/js/gage/justgage.js", function() {
+//head.js("assets/js/gage/raphael.2.1.0.min.js", "assets/js/gage/justgage.js", function() {
+//    debugger;
+//    window.onload = function() {
+//       
+//    };
 
 
 
-    var g1;
-    window.onload = function() {
-        var g1 = new JustGage({
-            id: "g1",
-            value: getRandomInt(0, 1000),
-            min: 0,
-            max: 1000,
-            relativeGaugeSize: true,
-            gaugeColor: "rgba(0,0,0,0.4)",
-            levelColors: "#0DB8DF",
-            labelFontColor : "#ffffff",
-            titleFontColor: "#ffffff",
-            valueFontColor :"#ffffff",
-            label: "VISITORS",
-            gaugeWidthScale: 0.2,
-            donut: true
-        });
-    };
-
-
-
-});
+//});
