@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			.csrf().disable()
 			
 			.authorizeRequests()
-				.antMatchers("/assets/**","/css/**","/photoalbum/**","/bootstrap/**","/fluidgallery/**","/js/**").permitAll()	//定义不需要被保护的URL
+				.antMatchers("/assets/**","/css/**","/photoalbum/**","/bootstrap/**","/fluidgallery/**","/js/**","/timeline/**").permitAll()	//定义不需要被保护的URL
 				.anyRequest().authenticated()	//定义需要被保护的URL，即需要通过身份验证
 				.and()
 			.formLogin()	//定义当用户需要登录时，跳转的登录页面
