@@ -3,7 +3,11 @@
 <mapper namespace="com.damionew.mapper.UserMapper">
 
 	<insert id="insertTest">
-		insert into gm_user (userid,username,password) values (2,3,4)
+		insert into gm_user (userid,username,password) values (4,3,4)
+	</insert>
+	
+	<insert id="insertUser">
+		insert into gm_user (userid,username,password) values (#{userid},3,4)
 	</insert>
 	
 	<select id="findUserByUserName" resultType="com.damionew.model.User">
