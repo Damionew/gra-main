@@ -14,10 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.damionew.service.LoginHistoryService;
+
+import io.swagger.annotations.ApiOperation;
 
 /**
  * 通过前台获取经纬度转换为地址信息
@@ -29,8 +32,10 @@ import com.damionew.service.LoginHistoryService;
 public class WeatherController {
 	@Autowired
 	LoginHistoryService loginHistoryService;
+	
+	@ApiOperation(value = "获取天气信息",notes ="通过和风天气接口获取并处理天气信息")
 	@ResponseBody
-	@RequestMapping("weather/uploadLocation")
+	@RequestMapping(value = "weather/uploadLocation",method = RequestMethod.GET)
 	public String locationTransform(HttpServletRequest request) throws IOException {
 		// 经度
 		String lng = request.getParameter("lng");

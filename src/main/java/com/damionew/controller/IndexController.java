@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
@@ -19,16 +20,20 @@ import com.damionew.service.LoginHistoryService;
 import com.damionew.service.MenuService;
 import com.damionew.utils.UserInfoUtil;
 
+import io.swagger.annotations.ApiOperation;
+
 @Controller
 public class IndexController {
 	
 	@Autowired
 	MenuService menuService;
+	
 	@Autowired
 	LoginHistoryService loginHistoryService;
-	@RequestMapping(value= {"/index","/"})
+	
+	@ApiOperation(value="跳转Index页面，并返回菜单和用户名",notes="")
+	@RequestMapping(value= {"/index","/"},method = RequestMethod.GET)
 	public String indexPage(Model model) {
-		
 		// 菜单（二级）
 		List<Menu> menuList = menuService.menuList();
 		model.addAttribute("menuList", menuList);
@@ -39,8 +44,9 @@ public class IndexController {
 		return "index";
 	}
 	
+	@ApiOperation(value="返回浏览人数",notes="通过浏览记录计算")
 	@ResponseBody
-	@RequestMapping("/countVistors")
+	@RequestMapping(value = "/countVistors",method=RequestMethod.GET)
 	public String countVistors() {
 		String count = loginHistoryService.selectCountVistors();
 		System.out.println(count);

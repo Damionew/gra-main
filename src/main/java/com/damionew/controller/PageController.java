@@ -7,26 +7,31 @@ package com.damionew.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class PageController {
 	
-	@RequestMapping("/invoice")
+	@RequestMapping(value = "/invoice",method = RequestMethod.GET)
 	public String invoice() {
 		return "invoice";
 	}
 	
-	@RequestMapping("/photoalbum")
+	@RequestMapping(value = "/photoalbum",method = RequestMethod.GET)
 	public String photoalbum() {
 		return "photoalbum";
 	}
 	
-	@RequestMapping("/familyPhoto")
+	@RequestMapping(value = "/familyPhoto",method = RequestMethod.GET)
 	public String familyPhoto() {
 		return "familyPhoto";
 	}
-	@RequestMapping("/timeline")
+	@RequestMapping(value = "/timeline",method = RequestMethod.GET)
 	public String timeLine() {
 		return "timeline";
+	}
+	@RequestMapping(value = "/swagger",method = RequestMethod.GET)
+	public String swagger() {
+		return "swagger";
 	}
 }
