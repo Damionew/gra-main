@@ -21,7 +21,7 @@ public class RabbitMqHelloTest {
 	
 	@ApiOperation(value = "RabbitMq消息队列测试")
 	@ResponseBody
-	@RequestMapping(value = "/rabbitTest",method = RequestMethod.POST)
+	@RequestMapping(value = "/rabbitTest",method = RequestMethod.GET)
 	public void hello() throws Exception{
 		System.out.println("rabbitTest");
 		helloSender.send();
