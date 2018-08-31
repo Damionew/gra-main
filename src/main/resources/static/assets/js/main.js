@@ -16,7 +16,7 @@ head.js("assets/js/newsticker/jquery.newsTicker.js", function() {
     var nt_title = $('#nt-title').newsTicker({
         row_height: 18,
         max_rows: 1,
-        duration: 5000,
+        duration: 50000,
         pauseOnHover: 0
     });
 
