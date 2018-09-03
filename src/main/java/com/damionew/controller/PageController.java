@@ -34,4 +34,8 @@ public class PageController {
 	public String swagger() {
 		return "swagger";
 	}
+	@RequestMapping(value = "/test",method = RequestMethod.GET)
+	public String test() {
+		return "test";
+	}
 }
