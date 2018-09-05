@@ -9,9 +9,9 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 @EnableWebSocket
-//@EnableDiscoveryClient
+/**@EnableDiscoveryClient**/
 @SpringBootApplication
-@MapperScan("com.damionew.mapper")  //开启自动扫描Mapper
+@MapperScan("com.damionew.mapper")  /**开启自动扫描Mapper**/
 public class GraMainApplication extends SpringBootServletInitializer{
 	
 	public static void main(String[] args) {

@@ -16,4 +16,6 @@ public interface MenuMapper {
 	public List<Menu> parentMenu();
 	
 	public List<Menu> childMenu(String parentId); 
+	
+	public List<Menu> selectMenuByName(String menuName);
 }

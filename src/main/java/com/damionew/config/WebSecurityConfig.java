@@ -12,7 +12,7 @@ import com.damionew.security.CustomUserService;
 import com.damionew.security.MyPasswordEncoder;
 
 @Configuration
-@EnableWebSecurity	//注解开启Spring Security功能
+@EnableWebSecurity	/**注解开启Spring Security功能**/
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	/**
@@ -45,11 +45,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			.csrf().disable()
 			
 			.authorizeRequests()
-				.antMatchers("/assets/**","/css/**","/photoalbum/**","/bootstrap/**",
-						"/fluidgallery/**","/js/**","/timeline/**").permitAll()	//定义不需要被保护的URL
-				.anyRequest().authenticated()	//定义需要被保护的URL，即需要通过身份验证
+				//定义不需要被保护的URL
+				.antMatchers("/assets/**","/css/**","/photoalbum/**","/bootstrap/**","/easyui/**",
+						"/fluidgallery/**","/js/**","/timeline/**").permitAll()	
+				//定义需要被保护的URL，即需要通过身份验证
+				.anyRequest().authenticated()	
 				.and()
-			.formLogin()	//定义当用户需要登录时，跳转的登录页面
+			.formLogin()
+				//定义当用户需要登录时，跳转的登录页面
 				.loginPage("/login")
 				.permitAll()
 				.defaultSuccessUrl("/index")

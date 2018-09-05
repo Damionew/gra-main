@@ -42,7 +42,7 @@ public class WeatherController {
 		// 纬度
 		String lat = request.getParameter("lat");
 		// 登录成功，将用户登录信息插入历史表中
-		Map<String, String> loginHistory = new HashMap<String, String>();
+		Map<String, String> loginHistory = new HashMap<String, String>(16);
 		loginHistory.put("lng", lng);
 		loginHistory.put("lat", lat);
 		loginHistoryService.insertLoginHistory(loginHistory);
@@ -55,7 +55,8 @@ public class WeatherController {
 		conn.setRequestMethod("GET");
 		conn.setConnectTimeout(5000);
 		conn.setReadTimeout(5000);
-		if (conn.getResponseCode() == 200) {
+		int state = 200;
+		if (conn.getResponseCode() == state) {
 			InputStream inputStream = conn.getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 			String str;
@@ -104,13 +105,13 @@ public class WeatherController {
 		// 温度
 		String tmp = now.getString("tmp");
 		// 风力
-		String wind_spd = now.getString("wind_spd");
+		String windSpd = now.getString("wind_spd");
 		// 云气
-		String cond_txt = now.getString("cond_txt");
+		String condTxt = now.getString("cond_txt");
 		JSONObject weatherResult = new JSONObject();
 		weatherResult.put("tmp",tmp);
-		weatherResult.put("wind_spd",wind_spd);
-		weatherResult.put("cond_txt",cond_txt);
+		weatherResult.put("wind_spd",windSpd);
+		weatherResult.put("cond_txt",condTxt);
 		weatherResult.put("city", city);
 		return weatherResult.toJSONString();
 	}

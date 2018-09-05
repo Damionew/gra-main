@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @Controller
 public class ChatRoom {
-	//聊天室页面
+	/**聊天室页面**/
 	@ApiOperation(value = "聊天室",notes = "返回当前用户名并跳转到聊天室页面")
 	@RequestMapping(value = "/chatroom",method = RequestMethod.GET)
 	public String chatRoomPage(Model model) {

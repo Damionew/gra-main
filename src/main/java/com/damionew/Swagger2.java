@@ -12,8 +12,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-/*
- * Swagger2配置类
+/** Swagger2配置类
 	@Api：修饰整个类，描述Controller的作用
 	@ApiOperation：描述一个类的一个方法，或者说一个接口
 	@ApiParam：单个参数描述
@@ -25,7 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 	@ApiError ：发生错误返回的信息
 	@ApiParamImplicitL：一个请求参数
 	@ApiParamsImplicit 多个请求参数
- */
+ **/
 @Configuration
 @EnableSwagger2
 public class Swagger2 {

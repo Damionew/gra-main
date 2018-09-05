@@ -2,10 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.damionew.mapper.MenuMapper">
 	<select id="parentMenu" resultType="com.damionew.model.Menu">
-		SELECT * FROM gra_menu WHERE menuLevel = "1" order by menuOrder
+		SELECT * FROM gra_menu WHERE menuLevel = "1" order by menuId
 	</select>
 	
 	<select id="childMenu" resultType="com.damionew.model.Menu">
-		SELECT * FROM gra_menu WHERE parentId = #{parentId} order by menuOrder
+		SELECT * FROM gra_menu WHERE parentId = #{parentId} order by menuId
+	</select>
+	
+	<select id="selectMenuByName" resultType="com.damionew.model.Menu">
+		select * from gra_menu where name = #{menuName}
 	</select>
 </mapper>

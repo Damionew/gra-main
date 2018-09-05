@@ -3,9 +3,9 @@ package com.damionew.model;
 import java.util.List;
 
 public class Menu {
-	//菜单ID
+	/**菜单ID**/
 	private String menuId;
-	//菜单名称
+	/**菜单名称**/
 	private String name;
 	//父菜单ID
 	private String parentId;

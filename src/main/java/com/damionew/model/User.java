@@ -24,12 +24,14 @@ public class User implements UserDetails,Serializable{
 	public void setUserid(String userid) {
 		this.userid = userid;
 	}
+	@Override
 	public String getUsername() {
 		return username;
 	}
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	@Override
 	public String getPassword() {
 		return password;
 	}
@@ -42,6 +44,7 @@ public class User implements UserDetails,Serializable{
 	public void setSys(String sys) {
 		this.sys = sys;
 	}
+	@Override
 	public Collection<GrantedAuthority> getAuthorities() {
 		return authorities;
 	}

@@ -19,7 +19,7 @@ public class HelloReceiver {
 	@RabbitHandler
 	public void process(String hello) {
 		System.out.println("Receiver :"+hello);
-		String RedisInfo = stringRedisTemplate.opsForValue().get("RedisTest");
-		System.out.println("Redis get Info:"+RedisInfo);
+		String redisInfo = stringRedisTemplate.opsForValue().get("RedisTest");
+		System.out.println("Redis get Info:"+redisInfo);
 	}
 }

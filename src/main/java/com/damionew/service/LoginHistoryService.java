@@ -15,7 +15,7 @@ public class LoginHistoryService {
 	LoginHistoryMapper loginHistoryMapper;
 	public void insertLoginHistory(Map<String, String> map) {
 		map.put("username", UserInfoUtil.getCurUsername());
-		map.put("date", DateUtil.DateFormate1());
+		map.put("date", DateUtil.dateFormate1());
 		loginHistoryMapper.insertLoginHistory(map);
 	}
 	public String selectCountVistors() {

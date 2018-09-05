@@ -12,6 +12,7 @@ import com.damionew.model.Menu;
 public class MenuService {
 	@Autowired
 	MenuMapper menuMapper;
+	
 	public List<Menu> menuList(){
 		//1.查询父菜单
 		List<Menu> parentMenus = menuMapper.parentMenu();
@@ -22,7 +23,14 @@ public class MenuService {
 			List<Menu> childMenus = menuMapper.childMenu(parentId);
 			menu.setChildMenus(childMenus);
 		}
-		
 		return parentMenus;
+	}
+	
+	
+	public void menuAdd(String parentMenu,String menuName,String menuUrl) {
+		// 首先判断是否有相同菜单名
+		List<Menu> menuList = menuMapper.selectMenuByName(menuName);
+		
+		System.out.println(menuList.get(0).getName());
 	}
 }
