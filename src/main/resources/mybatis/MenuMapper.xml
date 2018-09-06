@@ -26,4 +26,8 @@
 	<select id="deleteChildMenu">
 		delete from gra_menu where menuName = #{menuName}
 	</select>
+	
+	<update id="updateMenuByName">
+		update gra_menu set menuName = #{newMenuName},url = #{menuUrl} where menuName = #{oldMenuName}
+	</update>
 </mapper>

@@ -58,9 +58,26 @@ public class MenuService {
 		return 1;
 	}
 	
+	/** 
+	 * 单个子菜单查询
+	 * @param menuName
+	 * @return
+	 */
 	public Menu menuQuery(String menuName) {
 		// 首先判断是否有相同菜单名
 		List<Menu> menuList = menuMapper.selectMenuByName(menuName);
 		return menuList.get(0);
 	}
+	
+	/**
+	 * 子菜单更新
+	 * @param menuName
+	 * @return 状态值code
+	 */
+	public int menuUpdate(String oldMenuName,String newMenuName,String menuUrl) {
+		// 首先判断是否有相同菜单名
+		menuMapper.updateMenuByName(oldMenuName,newMenuName,menuUrl);
+		return 1;
+	}
 }
+

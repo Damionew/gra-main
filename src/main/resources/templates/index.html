@@ -252,9 +252,9 @@
                             </a>
                             <ul>
                                 <li th:each="childmenu : ${parentmenu.childMenus}">
-                                    <a class="tooltip-tip2 ajax-load" th:href="${childmenu.url}"  th:title="${childmenu.name}" target="iframe">
+                                    <a class="tooltip-tip2 ajax-load" th:href="${childmenu.url}"  th:title="${childmenu.menuName}" target="iframe">
                                     	<i class="entypo-doc-text"></i>
-                                    	<span th:text="${childmenu.name}"></span>
+                                    	<span th:text="${childmenu.menuName}"></span>
                                     </a>
                                 </li>
                             </ul>

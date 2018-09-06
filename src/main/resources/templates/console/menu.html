@@ -20,32 +20,24 @@
 	<div style="margin:20px 0 10px 0;">
 		<a href="#" class="easyui-linkbutton" onclick="javascript:addMenu()">添加菜单</a>
 		<a href="#" class="easyui-linkbutton" onclick="javascript:deleteMenu()">删除菜单</a>
+		<a href="#" class="easyui-linkbutton" onclick="javascript:saveMenu()">保存</a>
 	</div>
-	<!-- <div class="easyui-panel" title="添加菜单" style="width:400px;">
-		<div style="margin-bottom:5px">
-			<div>菜单名称</div>
-			<input class="easyui-textbox" id="menuName" style="width:100%;height:32px">
-		</div>
-		<div style="margin-bottom:5px">
-			<div>URL</div>
-			<input class="easyui-textbox" id="menuUrl" style="width:100%;height:32px">
-		</div>
-	</div> -->
 	
 	<div class="easyui-panel" style="padding: 5px;width:251px;">
 	<h2>菜单管理</h2>
 	<div style="margin: 20px 0;"></div>
-		<ul id="menu" class="easyui-tree" data-options="animate:true,lines:true" th:each="parentMenu:${menu}">
-			<li data-options="state:'closed'" >
-				<span th:text="${parentMenu.menuName}"></span>
+		<ul id="menu" class="easyui-tree" data-options="animate:true,lines:true" >
+			<li data-options="state:'closed'" th:each="parentMenu:${menu}">
+				<span th:text="${parentMenu.menuName}" ></span>
 				<ul>
-					<li th:each="childMenu:${parentMenu.childMenus}">
+					<li th:each="childMenu:${parentMenu.childMenus}" >
 						<span th:text="${childMenu.menuName}" onclick="javascript:childMenuDetail()"></span>
 					</li>
 				</ul>
 			</li>
 		</ul>
 	</div>
+	
 	<div class="easyui-panel" title="菜单详细" style="width:400px;">
 		<div style="margin-bottom:5px">
 			<div>菜单名称</div>
@@ -58,6 +50,21 @@
 	</div>
 </body>
 <script type="text/javascript">
+	$("#menu").tree({
+		onClick:function childMenuDetail(node){
+			var node = $("#menu").tree("getSelected");
+			var menuName = node.text;
+			$.ajax({
+				url : "menu/queryMenu/"+menuName,
+				dataType : "json",
+				method : "get",
+				success : function(res){
+					$("#menuName").textbox("setValue", res.menu.menuName);
+					$("#menuUrl").textbox("setValue", res.menu.url);
+				}
+			})
+		}
+	})
 	function addMenu(){
 		var node = $("#menu").tree("getSelected");
 		parentMenu = node.text;
@@ -83,6 +90,7 @@
 					// 清空两个控件值
 					$("#menuName").textbox('clear');
 					$("#menuUrl").textbox('clear');
+					window.location.reload();
 				}else{
 					alert("添加失败，请检查是否存在相同菜单名");
 				}
@@ -106,17 +114,30 @@
 			}
 		})
 	}
-	function childMenuDetail(){
+	function saveMenu(){
+		// 获取选中tree节点
 		var node = $("#menu").tree("getSelected");
-		var menuName = node.text;
+		// 获取节点名
+		var oldMenuName = node.text;
+		// 获取Input框中的新节点名
+		var newMenuName = $("#menuName")[0].value;
+		var menuUrl = $("#menuUrl")[0].value;
 		$.ajax({
-			url : "menu/queryMenu/"+menuName,
+			url : "menu/updateMenu",
 			dataType : "json",
 			method : "get",
+			data : {
+				"oldMenuName" : oldMenuName,
+				"newMenuName" : newMenuName,
+				"menuUrl" : menuUrl
+			},
 			success : function(res){
-				debugger;
-				$("#menuName").textbox("setValue", res.menuName);
-				$("#menuUrl").textbox("setValue", res.url);
+				if(res.code == 1){
+					alert("修改成功");
+					window.location.reload();
+				}else{
+					alert("修改失败");
+				}
 			}
 		})
 	}

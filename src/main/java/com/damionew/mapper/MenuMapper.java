@@ -8,6 +8,7 @@ package com.damionew.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.damionew.model.Menu;
 
@@ -24,4 +25,11 @@ public interface MenuMapper {
 	public void insertChildMenu(Menu menu);
 	
 	public void deleteChildMenu(String menuName);
+
+	/**
+	 * @param oldMenuName
+	 * @param newMenuName
+	 * @return
+	 */
+	public void updateMenuByName(@Param(value="oldMenuName")String oldMenuName, @Param(value="newMenuName")String newMenuName,@Param(value="menuUrl") String menuUrl);
 }

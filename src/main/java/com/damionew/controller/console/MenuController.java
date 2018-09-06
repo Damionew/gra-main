@@ -64,4 +64,14 @@ public class MenuController {
 		object.put("menu",menu);
 		return object.toJSONString();
 	}
+	
+	@ApiOperation(value="修改子菜单",notes="")
+	@GetMapping(value="menu/updateMenu")
+	@ResponseBody
+	public String menuUpdate(String oldMenuName,String newMenuName,String menuUrl) {
+		int code = menuService.menuUpdate(oldMenuName,newMenuName,menuUrl);
+		JSONObject object = new JSONObject();
+		object.put("code",code);
+		return object.toJSONString();
+	}
 }
