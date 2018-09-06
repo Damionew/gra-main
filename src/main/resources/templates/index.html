@@ -246,9 +246,9 @@
                             </a>
                         </li>
                         <li th:each="parentmenu : ${menuList}">
-                            <a class="tooltip-tip ajax-load" th:title="${parentmenu.name}">
+                            <a class="tooltip-tip ajax-load" th:title="${parentmenu.menuName}">
                                 <i class="icon-document-edit"></i>
-                                <span th:text="${parentmenu.name}"></span>
+                                <span th:text="${parentmenu.menuName}"></span>
                             </a>
                             <ul>
                                 <li th:each="childmenu : ${parentmenu.childMenus}">

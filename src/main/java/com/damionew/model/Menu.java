@@ -6,7 +6,7 @@ public class Menu {
 	/**菜单ID**/
 	private String menuId;
 	/**菜单名称**/
-	private String name;
+	private String menuName;
 	//父菜单ID
 	private String parentId;
 	//菜单url
@@ -15,6 +15,8 @@ public class Menu {
 	private String icon;
 	//菜单顺序
 	private int menuOrder;
+	// 菜单等级
+	private int menuLevel;
 	//子菜单
 	private List<Menu> childMenus;
 	
@@ -24,11 +26,18 @@ public class Menu {
 	public void setMenuId(String menuId) {
 		this.menuId = menuId;
 	}
-	public String getName() {
-		return name;
+	
+	public int getMenuLevel() {
+		return menuLevel;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setMenuLevel(int menuLevel) {
+		this.menuLevel = menuLevel;
+	}
+	public String getMenuName() {
+		return menuName;
+	}
+	public void setMenuName(String menuName) {
+		this.menuName = menuName;
 	}
 	public String getParentId() {
 		return parentId;

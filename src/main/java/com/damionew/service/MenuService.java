@@ -27,10 +27,40 @@ public class MenuService {
 	}
 	
 	
-	public void menuAdd(String parentMenu,String menuName,String menuUrl) {
+	public int menuAdd(String parentMenu,String menuName,String menuUrl) {
 		// 首先判断是否有相同菜单名
 		List<Menu> menuList = menuMapper.selectMenuByName(menuName);
-		
-		System.out.println(menuList.get(0).getName());
+		// 若有，则返回；若无，则继续执行
+		if (menuList.size() > 0) {
+			return 0;
+		}
+		// 菜单名未重复
+		// 根据父菜单名获取父菜单id
+		Menu parent = menuMapper.selectParentMenuByName(parentMenu);
+		// 执行插入
+		Menu childMenu = new Menu();
+		childMenu.setMenuName(menuName);
+		childMenu.setParentId(parent.getMenuId());
+		childMenu.setUrl(menuUrl);
+		childMenu.setMenuLevel(2);
+		menuMapper.insertChildMenu(childMenu);
+		return 1;
+	}
+	
+	public int menuDelete(String menuName) {
+		// 首先判断是否有相同菜单名
+		List<Menu> menuList = menuMapper.selectMenuByName(menuName);
+		// 若有，则返回；若无，则继续执行
+		if (menuList.size() == 0) {
+			return 0;
+		}
+		menuMapper.deleteChildMenu(menuName);
+		return 1;
+	}
+	
+	public Menu menuQuery(String menuName) {
+		// 首先判断是否有相同菜单名
+		List<Menu> menuList = menuMapper.selectMenuByName(menuName);
+		return menuList.get(0);
 	}
 }

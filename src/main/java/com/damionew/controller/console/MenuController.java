@@ -39,10 +39,29 @@ public class MenuController {
 	@ResponseBody
 	public String menuAdd(String parentMenu,String menuName,String menuUrl) {
 		System.out.println(parentMenu+menuName+menuUrl);
-		menuService.menuAdd(parentMenu,menuName,menuUrl);
+		int code = menuService.menuAdd(parentMenu,menuName,menuUrl);
 		JSONObject object = new JSONObject();
-		object.put("code", 1);
+		object.put("code",code);
 		return object.toJSONString();
 	}
 	
+	@ApiOperation(value="删除子菜单",notes="")
+	@GetMapping(value="menu/deleteMenu/{menuName}")
+	@ResponseBody
+	public String menuDelete(@PathVariable String menuName) {
+		int code = menuService.menuDelete(menuName);
+		JSONObject object = new JSONObject();
+		object.put("code",code);
+		return object.toJSONString();
+	}
+	
+	@ApiOperation(value="子菜单详细",notes="")
+	@GetMapping(value="menu/queryMenu/{menuName}")
+	@ResponseBody
+	public String menuQuery(@PathVariable String menuName) {
+		Menu menu = menuService.menuQuery(menuName);
+		JSONObject object = new JSONObject();
+		object.put("menu",menu);
+		return object.toJSONString();
+	}
 }

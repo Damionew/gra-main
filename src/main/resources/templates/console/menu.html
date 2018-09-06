@@ -8,13 +8,20 @@
 <link rel="stylesheet" type="text/css" href="easyui/demo.css">
 <script type="text/javascript" src="easyui/jquery.min.js"></script>
 <script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+<style type="text/css">
+	.panel{
+		display:inline !important;
+		float:left;
+		margin-left:50px;
+	}
+</style>
 </head>
 <body>
 	<div style="margin:20px 0 10px 0;">
 		<a href="#" class="easyui-linkbutton" onclick="javascript:addMenu()">添加菜单</a>
 		<a href="#" class="easyui-linkbutton" onclick="javascript:deleteMenu()">删除菜单</a>
 	</div>
-	<div class="easyui-panel" title="添加菜单" style="width:400px;">
+	<!-- <div class="easyui-panel" title="添加菜单" style="width:400px;">
 		<div style="margin-bottom:5px">
 			<div>菜单名称</div>
 			<input class="easyui-textbox" id="menuName" style="width:100%;height:32px">
@@ -23,20 +30,31 @@
 			<div>URL</div>
 			<input class="easyui-textbox" id="menuUrl" style="width:100%;height:32px">
 		</div>
-	</div>
+	</div> -->
+	
+	<div class="easyui-panel" style="padding: 5px;width:251px;">
 	<h2>菜单管理</h2>
 	<div style="margin: 20px 0;"></div>
-	<div class="easyui-panel" style="padding: 5px">
 		<ul id="menu" class="easyui-tree" data-options="animate:true,lines:true" th:each="parentMenu:${menu}">
 			<li data-options="state:'closed'" >
-				<span th:text="${parentMenu.name}"></span>
+				<span th:text="${parentMenu.menuName}"></span>
 				<ul>
 					<li th:each="childMenu:${parentMenu.childMenus}">
-						<span th:text="${childMenu.name}"></span>
+						<span th:text="${childMenu.menuName}" onclick="javascript:childMenuDetail()"></span>
 					</li>
 				</ul>
 			</li>
 		</ul>
+	</div>
+	<div class="easyui-panel" title="菜单详细" style="width:400px;">
+		<div style="margin-bottom:5px">
+			<div>菜单名称</div>
+			<input class="easyui-textbox" id="menuName" style="width:100%;height:32px">
+		</div>
+		<div style="margin-bottom:5px">
+			<div>URL</div>
+			<input class="easyui-textbox" id="menuUrl" style="width:100%;height:32px">
+		</div>
 	</div>
 </body>
 <script type="text/javascript">
@@ -62,9 +80,43 @@
 			success : function(res){
 				if(res.code == 1){
 					alert("添加成功");
+					// 清空两个控件值
+					$("#menuName").textbox('clear');
+					$("#menuUrl").textbox('clear');
 				}else{
-					alert("添加失败");
+					alert("添加失败，请检查是否存在相同菜单名");
 				}
+			}
+		})
+	}
+	function deleteMenu(){
+		var node = $("#menu").tree("getSelected");
+		var menuName = node.text;
+		$.ajax({
+			url : "menu/deleteMenu/"+menuName,
+			dataType : "json",
+			method : "get",
+			success : function(res){
+				if(res.code == 1){
+					alert("删除成功");
+					window.location.reload();
+				}else{
+					alert("删除失败");
+				}
+			}
+		})
+	}
+	function childMenuDetail(){
+		var node = $("#menu").tree("getSelected");
+		var menuName = node.text;
+		$.ajax({
+			url : "menu/queryMenu/"+menuName,
+			dataType : "json",
+			method : "get",
+			success : function(res){
+				debugger;
+				$("#menuName").textbox("setValue", res.menuName);
+				$("#menuUrl").textbox("setValue", res.url);
 			}
 		})
 	}

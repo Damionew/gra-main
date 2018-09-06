@@ -18,4 +18,10 @@ public interface MenuMapper {
 	public List<Menu> childMenu(String parentId); 
 	
 	public List<Menu> selectMenuByName(String menuName);
+	
+	public Menu selectParentMenuByName(String parentMenu);
+	
+	public void insertChildMenu(Menu menu);
+	
+	public void deleteChildMenu(String menuName);
 }

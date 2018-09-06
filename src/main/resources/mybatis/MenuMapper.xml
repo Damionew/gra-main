@@ -10,6 +10,20 @@
 	</select>
 	
 	<select id="selectMenuByName" resultType="com.damionew.model.Menu">
-		select * from gra_menu where name = #{menuName}
+		select * from gra_menu where menuName = #{menuName}
+	</select>
+	
+	<select id="selectParentMenuByName" resultType="com.damionew.model.Menu">
+		select * from gra_menu where menuName = #{parentMenu}
+	</select>
+	
+	<insert id="insertChildMenu">
+		insert into gra_menu (menuName,parentId,url,icon,menuLevel) 
+		values
+		(#{menuName},#{parentId},#{url},#{icon},#{menuLevel})
+	</insert>
+	
+	<select id="deleteChildMenu">
+		delete from gra_menu where menuName = #{menuName}
 	</select>
 </mapper>
