@@ -49,7 +49,6 @@ public class IndexController {
 	@RequestMapping(value = "/countVistors",method=RequestMethod.GET)
 	public String countVistors() {
 		String count = loginHistoryService.selectCountVistors();
-		System.out.println(count);
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("countVistors",count);
 		return jsonObject.toJSONString();

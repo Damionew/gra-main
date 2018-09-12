@@ -2,31 +2,44 @@ package com.damionew.config;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.executor.parameter.ParameterHandler;
+import org.apache.ibatis.executor.resultset.DefaultResultSetHandler;
+import org.apache.ibatis.executor.resultset.ResultSetHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMapping;
+import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.type.TypeHandlerRegistry;
- 
- 
+import org.springframework.stereotype.Component;
+
+import com.damionew.utils.DateUtil;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.regex.Matcher;
  
- 
+@Component
+/** @Intercepts用于表名当前对象是拦截器 **/
 @Intercepts({
+		/** @Signature表名要拦截的接口、方法及对应的参数类型 **/
+		/** 删除、插入、更新都属于update **/
         @Signature(type = Executor.class, method = "update", args = {
                 MappedStatement.class, Object.class }),
         @Signature(type = Executor.class, method = "query", args = {
                 MappedStatement.class, Object.class, RowBounds.class,
-                ResultHandler.class }) })
+                ResultHandler.class })
+		})
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class MybatisInterceptor implements Interceptor {
  
@@ -34,21 +47,22 @@ public class MybatisInterceptor implements Interceptor {
     public Object intercept(Invocation invocation) throws Throwable {
         try{
             MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];  // 获取xml中的一个select/update/insert/delete节点，主要描述的是一条SQL语句
+           
             Object parameter = null;
             // 获取参数，if语句成立，表示sql语句有参数，参数格式是map形式
             if (invocation.getArgs().length > 1) {
                 parameter = invocation.getArgs()[1];
-                System.out.println("parameter = " + parameter);
+                System.out.println(DateUtil.dateFormate1()+" 执行SQL:Param-> " + parameter);
             }
             String sqlId = mappedStatement.getId(); // 获取到节点的id,即sql语句的id
-            System.out.println("sqlId = " + sqlId);
+            System.out.println(DateUtil.dateFormate1()+" 执行SQL:ID-> " + sqlId);
             BoundSql boundSql = mappedStatement.getBoundSql(parameter);  // BoundSql就是封装myBatis最终产生的sql类
             Configuration configuration = mappedStatement.getConfiguration();  // 获取节点的配置
             String sql = getSql(configuration, boundSql, sqlId); // 获取到最终的sql语句
-            System.out.println("sql = " + sql);
+            System.out.println(DateUtil.dateFormate1()+" 执行SQL:Statement-> "+ sql);
             //log.debug(sql);
         }catch(Exception e){
-           // log.error(e.getMessage(), e);
+           e.printStackTrace();
         }
         return invocation.proceed();  // 执行完上面的任务后，不改变原有的sql执行过程
     }
@@ -56,12 +70,12 @@ public class MybatisInterceptor implements Interceptor {
     public static String getSql(Configuration configuration, BoundSql boundSql,String sqlId) {
         String sql = showSql(configuration, boundSql);
         StringBuilder str = new StringBuilder(100);
-        str.append(sqlId);
-        str.append(":");
+//        str.append(sqlId);
+//        str.append(":");
         str.append(sql);
         return str.toString();
     }
-    /*<br>    *如果参数是String，则添加单引号， 如果是日期，则转换为时间格式器并加单引号； 对参数是null和不是null的情况作了处理<br>　　*/
+    /** 如果参数是String，则添加单引号， 如果是日期，则转换为时间格式器并加单引号； 对参数是null和不是null的情况作了处理 **/
     private static String getParameterValue(Object obj) {
         String value = null;
         if (obj instanceof String) {
@@ -105,14 +119,25 @@ public class MybatisInterceptor implements Interceptor {
         }
         return sql;
     }
- 
+    /**
+     * 用于封装目标对象
+     */
     @Override
     public Object plugin(Object target) {
         return Plugin.wrap(target, this);
     }
- 
+    /**
+     * 用于配置一些属性
+     */
     @Override
     public void setProperties(Properties properties) {
        
+    }
+    
+    public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, RowBounds rowBounds, ParameterHandler parameterHandler,
+    		  ResultHandler resultHandler, BoundSql boundSql) {
+    		    ResultSetHandler resultSetHandler = new DefaultResultSetHandler(executor, mappedStatement, parameterHandler, resultHandler, boundSql, rowBounds);
+//    		    resultSetHandler = (ResultSetHandler) interceptorChain.pluginAll(resultSetHandler);
+    		    return resultSetHandler;
     }
 }
